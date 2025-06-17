@@ -1,12 +1,18 @@
 import asyncpg
 import aio_pika
 
-connection = None
-channel = None
+intensity = 0.25
+message_count = 500
+user_num = 100
+speed = 1
 
 
 async def database_connection_init():
     return await asyncpg.connect(user="admin", password="admin", database="postgres", host="postgres", port=5432)
+
+
+connection = None
+channel = None
 
 
 async def get_connection():

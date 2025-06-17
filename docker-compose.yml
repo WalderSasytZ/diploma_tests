@@ -28,6 +28,8 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+      - 15672:15672
     healthcheck:
       test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
       start_period: 10s
@@ -43,6 +45,8 @@ services:
       dockerfile: Dockerfile
       target: message_generator
     depends_on:
+      rabbitmq:
+        condition: service_healthy
       postgres:
         condition: service_healthy
 
@@ -54,6 +58,8 @@ services:
       dockerfile: Dockerfile
       target: algorithm_1
     depends_on:
+      rabbitmq:
+        condition: service_healthy
       postgres:
         condition: service_healthy
 
