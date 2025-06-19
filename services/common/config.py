@@ -1,8 +1,8 @@
 import asyncpg
 import aio_pika
 
-intensity = 0.25
-message_count = 500
+intensity = 0.2
+message_count = 1000
 user_num = 100
 speed = 1
 

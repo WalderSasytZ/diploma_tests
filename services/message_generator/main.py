@@ -13,15 +13,20 @@ def generate_user_list():
     while len(user_list) < user_count:
         user_id = random.randint(1, config.user_num)
         if user_id not in user_list:
-            user_list.append(user_id)
+            user_list.append(str(user_id))
     return user_list
 
 
 async def main():
-    await asyncio.sleep(15)
+    await database.init_database()
+    logging.info("database recreated")
+    await asyncio.sleep(10)
+    logging.info("generator started")
     for message_id in range(config.message_count):
         await asyncio.sleep(random.expovariate(config.intensity * config.speed))
         await database.insert_message(message_id, generate_user_list())
+    await asyncio.sleep(30)
+    logging.info("publication is finished")
 
 
 def handle_exit(signum, frame):

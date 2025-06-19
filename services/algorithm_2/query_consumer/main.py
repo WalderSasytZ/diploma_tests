@@ -8,19 +8,17 @@ from common import config, database
 
 
 async def consumer():
-    await asyncio.sleep(10)
+    await asyncio.sleep(5)
     channel = await config.get_channel()
-    queue = await channel.declare_queue(name="Q_M", durable=True, passive=False)
+    queue = await channel.declare_queue(name="queue", durable=True, passive=False)
+    logging.info("consumer started")
 
     while True:
-        await asyncio.sleep(0.2 / config.speed)
-
-        while True:
-            await asyncio.sleep(0.035 / config.speed)
-            data = await queue.get(no_ack=True, fail=False)
-            if not data:
-                break
+        await asyncio.sleep(0.035 / config.speed)
+        data = await queue.get(no_ack=False, fail=False)
+        if data:
             await database.send_mail(json.loads(data.body.decode()), 2)
+            await data.ack()
 
 
 def handle_exit(signum, frame):

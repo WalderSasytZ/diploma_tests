@@ -32,14 +32,13 @@ services:
       - 15672:15672
     healthcheck:
       test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
-      start_period: 10s
-      interval: 5s
+      start_period: 5s
+      interval: 3s
       timeout: 5s
       retries: 30
 
   message_generator:
     container_name: message_generator
-    restart: always
     build:
       context: .
       dockerfile: Dockerfile
